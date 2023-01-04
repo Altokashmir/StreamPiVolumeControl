@@ -42,7 +42,16 @@ try:
     for currentArgument, currentValue in arguments:
  
         if currentArgument in ("-h", "--Help"):
-            print ("Displaying Help")
+            print ("usage: python VolumeControl.py [option] <value>")
+            print ("   or: python VolumeControl.py [option]")
+            print ("   or: python VolumeControl.py \n\n\n")
+
+            print ("-a, --Application       Specify the name of the application that will be controled")
+            print ("                        without the -a option it will use currently focused application")
+            print ("-v, --Volume            Set Volume (range 0-1, scales on master volume) of application")
+            print ("-i, --Increase          Increase the volume of the Application")
+            print ("-d, --Decrease          Decrease the volume of the Application")
+            print ("-m, --Mute              Mute the Application")
              
         elif currentArgument in ("-a", "--Application"):
             application = currentValue
