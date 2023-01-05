@@ -31,7 +31,7 @@ def get_currently_focused_application():
 application = get_currently_focused_application()
 increase = False
 decrease = False
-volume_level = 0
+volume_level = None
 mute = False
 
 try:
@@ -58,7 +58,7 @@ try:
             print (("Running Volume Control on % s") % (currentValue))
 
         elif currentArgument in ("-v", "--Volume"):
-            volume_level = currentValue
+            volume_level = float(currentValue)
             print (("Setting Application Volume to % s") % (currentValue))
 
         elif currentArgument in ("-i", "--Increase"):
@@ -143,12 +143,18 @@ def main():
         audio_controller.mute()
     else:
         audio_controller.unmute()
+        #setting low volume incase volume was zero but unmute was desired
+        if(audio_controller.volume == 0):
+            audio_controller.set_volume(0.1)
 
     if(increase):
         audio_controller.increase_volume(0.10) 
     
     if(decrease):
         audio_controller.decrease_volume(0.10)
+    
+    if(volume_level != None):
+        audio_controller.set_volume(volume_level)
 
 if __name__ == "__main__":
     main()
