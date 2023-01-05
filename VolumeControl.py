@@ -55,20 +55,12 @@ try:
              
         elif currentArgument in ("-a", "--Application"):
             application = currentValue
-            print (("Running Volume Control on % s") % (currentValue))
-
         elif currentArgument in ("-v", "--Volume"):
             volume_level = float(currentValue)
-            print (("Setting Application Volume to % s") % (currentValue))
-
         elif currentArgument in ("-i", "--Increase"):
             increase = True
-            print (("Enabling special output mode % s") % (currentValue))
-
         elif currentArgument in ("-d", "--Decrease"):
             decrease = True
-            print (("Enabling special output mode % s") % (currentValue))
-
         elif currentArgument in ("-m", "--Mute"):
             mute = True
              
