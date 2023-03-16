@@ -77,7 +77,7 @@ class AudioController:
         sessions = AudioUtilities.GetAllSessions()
         for session in sessions:
             interface = session.SimpleAudioVolume
-            if session.Process and session.Process.name() == self.process_name:
+            if session.Process and session.Process.name().lower() == self.process_name.lower():
                 interface.SetMute(1, None)
                 print(self.process_name, "has been muted.")  # debug
 
@@ -86,7 +86,7 @@ class AudioController:
         
         for session in sessions:
             interface = session.SimpleAudioVolume
-            if session.Process and session.Process.name() == self.process_name:
+            if session.Process and session.Process.name().lower() == self.process_name.lower():
                 interface.SetMute(0, None)
                 print(self.process_name, "has been unmuted.")  # debug
 
@@ -94,7 +94,7 @@ class AudioController:
         sessions = AudioUtilities.GetAllSessions()
         for session in sessions:
             interface = session.SimpleAudioVolume
-            if session.Process and session.Process.name() == self.process_name:
+            if session.Process and session.Process.name().lower() == self.process_name.lower():
                 print("Volume:", interface.GetMasterVolume())  # debug
                 return interface.GetMasterVolume()
 
@@ -102,7 +102,7 @@ class AudioController:
         sessions = AudioUtilities.GetAllSessions()
         for session in sessions:
             interface = session.SimpleAudioVolume
-            if session.Process and session.Process.name() == self.process_name:
+            if session.Process and session.Process.name().lower() == self.process_name.lower():
                 # only set volume in the range 0.0 to 1.0
                 self.volume = min(1.0, max(0.0, decibels))
                 interface.SetMasterVolume(self.volume, None)
@@ -112,7 +112,7 @@ class AudioController:
         sessions = AudioUtilities.GetAllSessions()
         for session in sessions:
             interface = session.SimpleAudioVolume
-            if session.Process and session.Process.name() == self.process_name:
+            if session.Process and session.Process.name().lower() == self.process_name.lower():
                 # 0.0 is the min value, reduce by decibels
                 self.volume = max(0.0, self.volume - decibels)
                 interface.SetMasterVolume(self.volume, None)
@@ -122,7 +122,7 @@ class AudioController:
         sessions = AudioUtilities.GetAllSessions()
         for session in sessions:
             interface = session.SimpleAudioVolume
-            if session.Process and session.Process.name() == self.process_name:
+            if session.Process and session.Process.name().lower() == self.process_name.lower():
                 # 1.0 is the max value, raise by decibels
                 self.volume = min(1.0, self.volume + decibels)
                 interface.SetMasterVolume(self.volume, None)
@@ -136,7 +136,7 @@ def main():
     else:
         audio_controller.unmute()
         #setting low volume incase volume was zero but unmute was desired
-        if(audio_controller.volume == 0):
+        if(audio_controller.volume == 0 and not increase):
             audio_controller.set_volume(0.1)
 
     if(increase):
