@@ -52,8 +52,8 @@ try:
             print ("-v, --Volume            Set Volume (range 0-1, scales on master volume) of application")
             print ("-i, --Increase          Increase the volume of the Application")
             print ("-d, --Decrease          Decrease the volume of the Application")
-            print ("-m, --Mute              Mute the Application")
-            print ("-t, --TunnelVision              Mute the Application")
+            print ("-m, --Mute              Toggle Mute the Application")
+            print ("-t, --TunnelVision      Toggle Mute every other Application")
              
         elif currentArgument in ("-a", "--Application"):
             application = currentValue
