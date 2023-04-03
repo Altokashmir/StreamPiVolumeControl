@@ -14,10 +14,10 @@ from ctypes import wintypes
 argumentList = sys.argv[1:]
  
 # Options
-options = "ha:v:idm"
+options = "ha:v:idmt"
  
 # Long options
-long_options = ["Help", "Application", "Volume", "Increase", "Decrease", "Mute"]
+long_options = ["Help", "Application", "Volume", "Increase", "Decrease", "Mute", "TunnelVision"]
 
 def get_currently_focused_application():
 
@@ -33,6 +33,7 @@ increase = False
 decrease = False
 volume_level = None
 mute = False
+tunnel_vision = False
 
 try:
     # Parsing argument
@@ -52,6 +53,7 @@ try:
             print ("-i, --Increase          Increase the volume of the Application")
             print ("-d, --Decrease          Decrease the volume of the Application")
             print ("-m, --Mute              Mute the Application")
+            print ("-t, --TunnelVision              Mute the Application")
              
         elif currentArgument in ("-a", "--Application"):
             application = currentValue
@@ -63,6 +65,8 @@ try:
             decrease = True
         elif currentArgument in ("-m", "--Mute"):
             mute = True
+        elif currentArgument in ("-t", "--TunnelVision"):
+            tunnel_vision = True
              
 except getopt.error as err:
     # output error, and return with an error code
@@ -73,13 +77,15 @@ class AudioController:
         self.process_name = process_name
         self.volume = self.process_volume()
 
-    def mute(self):
+    def toggle_mute(self):
         sessions = AudioUtilities.GetAllSessions()
         for session in sessions:
             interface = session.SimpleAudioVolume
             if session.Process and session.Process.name() == self.process_name:
-                interface.SetMute(1, None)
-                print(self.process_name, "has been muted.")  # debug
+                if(interface.GetMute()==0):
+                    interface.SetMute(1, None)
+                else:
+                    interface.SetMute(0, None)
 
     def unmute(self):
         sessions = AudioUtilities.GetAllSessions()
@@ -128,20 +134,25 @@ class AudioController:
                 interface.SetMasterVolume(self.volume, None)
                 print("Volume raised to", self.volume)  # debug
 
+    def toggle_tunnel_vision(self):
+        sessions = AudioUtilities.GetAllSessions()
+        for session in sessions:
+            interface = session.SimpleAudioVolume
+            if session.Process and session.Process.name() != self.process_name:
+                if(interface.GetMute()==0):
+                    interface.SetMute(1, None)
+                else:
+                    interface.SetMute(0, None)
+        print(self.process_name, "has been the only thing not muted.")  # debug
 
 def main():
     audio_controller = AudioController(application)
     if(mute):
-        audio_controller.mute()
-    else:
-        audio_controller.unmute()
-        #setting low volume incase volume was zero but unmute was desired
-        if(audio_controller.volume == 0):
-            audio_controller.set_volume(0.1)
-
+        audio_controller.toggle_mute()
+    if(tunnel_vision):
+        audio_controller.toggle_tunnel_vision()
     if(increase):
         audio_controller.increase_volume(0.10) 
-    
     if(decrease):
         audio_controller.decrease_volume(0.10)
     
